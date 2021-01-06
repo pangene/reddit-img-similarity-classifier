@@ -1,4 +1,6 @@
 import os
+import imagehash
+from PIL import Image
 from skimage.metrics import structural_similarity as ssim
 from skimage.transform import resize
 import matplotlib.pyplot as plt
@@ -6,17 +8,15 @@ import numpy as np
 import cv2
 
 TEST_IMG_PATH = 'test_images/'
+MSE_CUTOFF = 0.1  # Lower MSE is more similar 
+SSIM_CUTOFF = 0.6  # Higher SSIM is more similar
+HASH_CUTOFF = 30. # Lower hash difference is more similar
 
-
-def mse(imageA, imageB):
-    # the 'Mean Squared Error' between the two images is the
-    # sum of the squared difference between the two images;
-    # NOTE: the two images must have the same dimension
-    err = np.sum((imageA.astype("float") - imageB.astype("float")) ** 2)
-    err /= float(imageA.shape[0] * imageA.shape[1])
-    
-    # return the MSE, the lower the error, the more "similar"
-    # the two images are
+def mse(imgA, imgB):
+    '''Returns the Mean Squared Error (MSE) between the two images.'''
+    assert imgA.shape == imgB.shape
+    err = np.sum((imgA.astype("float") - imgB.astype("float")) ** 2)
+    err /= float(imgA.shape[0] * imgA.shape[1])
     return err
 
 
@@ -64,8 +64,13 @@ def img_folder_plot(path_img_folder):
     return image_paths
 
 
-def compare_images(imgA, imgB):
+def compare_images(imgA, imgB, visualize=False):
     '''Returns a tuple consisting of (MSE, SSIM) of the two images.'''
+    if visualize:
+        show_images([imgA, imgB])
+    hashA = imagehash.average_hash(Image.fromarray(imgA))
+    hashB = imagehash.average_hash(Image.fromarray(imgB))
+    hash_diff = abs(hashA - hashB)
     imgA = cv2.cvtColor(imgA, cv2.COLOR_BGR2GRAY)
     imgB = cv2.cvtColor(imgB, cv2.COLOR_BGR2GRAY)
     if imgA.shape[0] != imgB.shape[0] or imgA.shape[1] != imgB.shape[1]:
@@ -74,15 +79,23 @@ def compare_images(imgA, imgB):
                      max(imgA.shape[1], imgB.shape[1]))
         imgA = resize(imgA, max_shape, anti_aliasing=True)
         imgB = resize(imgB, max_shape, anti_aliasing=True)
-    return (mse(imgA, imgB), ssim(imgA, imgB))
+    similarity_score = (mse(imgA, imgB), ssim(imgA, imgB), hash_diff)
+    if visualize:
+        print(f'MSE: {similarity_score[0]}')
+        print(f'SSIM: {similarity_score[1]}')
+        print(f'HASH: {similarity_score[2]}')
+    return similarity_score
 
 
-def visualize_compare(imgA, imgB):
-    '''Plots the two images, prints out the MSE and SSIM'''
-    show_images([imgA, imgB])
+def similarity_func(imgA, imgB, \
+        MSE_cutoff=MSE_CUTOFF, SSIM_cutoff=SSIM_CUTOFF, HASH_cutoff=HASH_CUTOFF):
+    '''Returns True or False if two images are deemed similar.'''
     similarity_score = compare_images(imgA, imgB)
-    print(f'MSE: {similarity_score[0]}')
-    print(f'SSIM: {similarity_score[1]}')
+    if similarity_score[0] < MSE_CUTOFF or similarity_score[1] > SSIM_CUTOFF or\
+        similarity_score[2] < HASH_CUTOFF:
+        return True
+    return False
+
 
 test_img_path = lambda img_name: os.path.join(TEST_IMG_PATH, img_name)
 
