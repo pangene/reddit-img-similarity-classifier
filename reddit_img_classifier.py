@@ -18,6 +18,9 @@ logging.getLogger('skimage').setLevel(logging.WARNING)
 logging.getLogger('PIL').setLevel(logging.WARNING)
 logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
+
+# To use this program, please input your own client_id and client_secret for
+# the reddit API, either here or in a praw.ini file.
 reddit = praw.Reddit('reddit_img_classifier',
     user_agent='meme_classifier: by u/Puzzled_Yellow')
 
