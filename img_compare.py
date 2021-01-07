@@ -1,12 +1,12 @@
 import os
 import logging
 import imagehash
-from PIL import Image
+from PIL import Image  # necessary for imagehash
 from skimage.metrics import structural_similarity as ssim
 from skimage.transform import resize
 import matplotlib.pyplot as plt
 import numpy as np
-import cv2
+import cv2  # cv2 may not be necessary, could read using skimage?
 
 # Logging setup
 logging.basicConfig(
