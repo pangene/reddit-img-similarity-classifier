@@ -1,12 +1,12 @@
 # Introduction
 
-This is a very brief look at the reddit-img-similarity-classifier. For a better understanding and more detail, look in the showcase folder for a more detailed README.md that was made from the Jupyter Notebook file. Better yet, open up the Jupyter Notebook.
+This is a very brief look at the reddit-img-similarity-classifier. For a better understanding and more detail, look in the [showcase folder](https://github.com/pangene/reddit-img-similarity-classifier/tree/main/showcase) for a more detailed README.md that was made from the Jupyter Notebook file. Better yet, open up the Jupyter Notebook.
 
 This project was initially an attempt to classify meme formats together, later evolving to mainly just classifying similar images together (which includes meme formats).
 
-The img_compare.py file contains all the image comparison and classification stuff. The reddit_img_classifier.py contains the interaction with the (Reddit API (PRAW))[https://praw.readthedocs.io/en/latest/index.html]. 
+The img_compare.py file contains all the image comparison and classification stuff. The reddit_img_classifier.py contains the interaction with the [Reddit API (PRAW)](https://praw.readthedocs.io/en/latest/index.html). 
 
-Obviously, my client_id and client_secret for this project are hidden in a praw.ini I did not copy over. For information on how to use praw.ini, see [here](https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html)
+Obviously, my client_id and client_secret for this project are hidden in a praw.ini I did not copy over. For information on how to use praw.ini, see [here](https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html).
 
 # How it works
 
@@ -14,7 +14,7 @@ The img_compare.py file contains all the dealings of comparing and grouping imag
 
 It uses OpenCV, numpy, matplotlib, scikit-image and more to assist in this process.
 
-Essentially, for any two images (using cv2.imread (BGR) or any other imread that converts to a numpy array (likely RGB)) a similarity score can be calculated. That similarity score is composed of the mean squared error (MSE), the structural similarity index (SSIM), and the hash difference. See the showcase for more details.
+Essentially, for any two images (using cv2.imread (BGR) or any other imread that converts to a numpy array (likely RGB)) a similarity score can be calculated. That similarity score is composed of the mean squared error (MSE), the structural similarity index (SSIM), and the hash difference. [See the showcase](https://github.com/pangene/reddit-img-similarity-classifier/tree/main/showcase) for more details.
 
 A similarity score (or two images) can be inputted into a det_similarity function that determines similarity through what is currently a VERY basic algorithm.
 

@@ -224,6 +224,8 @@ show_images(images, show=20)
 
 Let's check for any similar images, ideally meme formats, using our classifer.
 
+WARNING: there are lots of different categories. Be prepared to scroll.
+
 
 ```python
 classifier_func(images, visualize=True);
