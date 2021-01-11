@@ -1,9 +1,8 @@
 import logging
-import requests
-import img_compare
 import praw
 from skimage import io
 import cv2
+import img_compare
 
 # Logging setup
 logging.basicConfig(
